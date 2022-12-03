@@ -81,6 +81,10 @@ public class Drivetrain extends SubsystemBase {
      * Gets the current angle of the gyro.
      */
     public double getGyroAngle() {
+        //System.out.println("NAVX Con? Gyro get angle.");
+        //System.out.println(navx.isConnected());
+        System.out.print("NAVX Angle: ");
+        System.out.println(navx.getAngle());
         return navx.getAngle();
     }
 
