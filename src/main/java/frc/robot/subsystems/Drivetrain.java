@@ -8,12 +8,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.util.Units;
 
 //Drivetrain Class
 public class Drivetrain extends SubsystemBase {
     public static Drivetrain instance;
     private CANSparkMax L_PRIMARY, R_PRIMARY;
+    SlewRateLimiter slewRateLeft = new SlewRateLimiter(0.9);
+    SlewRateLimiter slewRateRight = new SlewRateLimiter(0.9);
     private AHRS navx = new AHRS(SerialPort.Port.kMXP); // NOTE! You need to plug in the navx gyro thingy
     // into the kMXP, or 1 for short, for it to work. Doing usb or something with
     // mess things up
@@ -37,13 +40,11 @@ public class Drivetrain extends SubsystemBase {
      * @param speed
      */
     public void setLeftSpeed(double speed) {
-        System.out.println("left" + speed);
-        L_PRIMARY.set(speed * 0.6);
+        L_PRIMARY.set(slewRateLeft.calculate(speed * 0.6));
     }
 
     public void setRightSpeed(double speed) {
-        System.out.println("right" + speed);
-        R_PRIMARY.set(speed * 0.6);
+        R_PRIMARY.set(slewRateRight.calculate(speed * 0.6));
     }
 
     public double getLeftDistance() {
