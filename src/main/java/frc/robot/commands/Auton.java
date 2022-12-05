@@ -11,8 +11,9 @@ public class Auton extends SequentialCommandGroup {
             new PrintCommand("starting"),
             new TurnAngle(drivetrain, -45),
             new PrintCommand("turn finished, waiting..."),
-            new WaitCommand(5),
+            new WaitCommand(5), //TODO - remove this
             new DriveStraight(drivetrain, 2),
+            new WaitCommand(5),
             new PrintCommand("ending"));
     }
 }
