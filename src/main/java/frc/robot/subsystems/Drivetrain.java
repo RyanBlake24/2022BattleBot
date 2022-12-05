@@ -20,6 +20,9 @@ public class Drivetrain extends SubsystemBase {
     // into the kMXP, or 1 for short, for it to work. Doing usb or something with
     // mess things up
 
+    /**
+     * Initalizes the Drivetrain and its components.
+     */
     public Drivetrain() {
         // Setting the motors and their inversion
         double ENCODER_DISTANCE_TO_METERS = Math.PI * Units.inchesToMeters(4) / 15.0;
@@ -40,17 +43,52 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Angle", navx.getAngle());
     }
 
+    /**
+     * Gets the position (or number of rotations) of the left motor's encoder.
+     * 
+     * @return The position of the left motor's encoder
+     */
     public double getLeftDistance() {
         return L_PRIMARY.getEncoder().getPosition();
     }
 
+    /**
+     * Gets the position (or number of rotations) of the right motor's encoder.
+     * 
+     * @return The position of the right motor's encoder
+     */
     public double getRightDistance() {
         return R_PRIMARY.getEncoder().getPosition();
     }
 
+    /**
+     * Runs the drivetrain in Tank Drive Mode. Aka left joystick is left side, right
+     * joystick is right
+     * side.
+     * 
+     * @param leftSpeed  The speed from -1 to 1 to set the left motor. Typically
+     *                   taken from the left
+     *                   joystick's y-axis.
+     * @param rightSpeed The speed from -1 to 1 to set the right motor. Typically
+     *                   taken from the right
+     *                   joystick's y-axis.
+     */
     public void tankDrive(double leftSpeed, double rightSpeed) {
         drive.tankDrive(leftSpeed, rightSpeed);
     }
+
+    /**
+     * Runs the drivetrain in Arcade Drive Mode. Aka one joystick controls it's
+     * movement up and down,
+     * while the other controls it's movement left and right.
+     * 
+     * @param xSpeed The speed from -1 to 1 to set both motors to. Typically taken
+     *               from the left
+     *               joystick's y-axis.
+     * @param rot    The rotation from -1 to 1 to rotate the robot to. Typically
+     *               taken from the right
+     *               joystick's x-axis.
+     */
     public void arcadeDrive(double xSpeed, double rot) {
         drive.arcadeDrive(xSpeed, rot);
     }
@@ -62,19 +100,33 @@ public class Drivetrain extends SubsystemBase {
         return navx.getAngle();
     }
 
+    /**
+     * Sets all motor's speed to zero
+     */
     public void stop() {
         tankDrive(0, 0);
     }
 
+    /**
+     * Resets the gyro's yaw axis to 0 for what direction it is currently facing.
+     */
     public void resetGyro() {
         navx.reset();
     }
 
+    /**
+     * Gets the average position of the left and right motor's encoders
+     * 
+     * @return The average position of the left and right encoders
+     */
     public double getPosition() {
         return (double) (L_PRIMARY.getEncoder().getPosition() + R_PRIMARY.getEncoder().getPosition())
                 / 2.0;
     }
 
+    /**
+     * Resets the encoder's rotations back to zero.
+     */
     public void resetEncoders() {
         L_PRIMARY.getEncoder().setPosition(0);
         R_PRIMARY.getEncoder().setPosition(0);
