@@ -92,6 +92,11 @@ public class Drivetrain extends SubsystemBase {
         tankDrive(0, 0);
     }
 
+    public void hard_stop() {
+        L_PRIMARY.set(0);
+        R_PRIMARY.set(0);
+    }
+
     public void resetGyro() {
         navx.reset();
     }
