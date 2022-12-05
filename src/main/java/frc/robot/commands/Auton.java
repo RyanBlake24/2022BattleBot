@@ -9,11 +9,11 @@ public class Auton extends SequentialCommandGroup {
     public Auton(Drivetrain drivetrain){
         addCommands(
             new PrintCommand("starting"),
-            new TurnAngle(drivetrain, -45),
+            new TurnAngle(drivetrain, -45), //neg is left
             new PrintCommand("turn finished, waiting..."),
             new WaitCommand(5), //TODO - remove this
-            new DriveStraight(drivetrain, 2),
-            new WaitCommand(5),
+            new DriveStraight(drivetrain, 2, 0.75), //2 meters at 75% power
+            new WaitCommand(5), //TODO - remove this
             new PrintCommand("ending"));
     }
 }

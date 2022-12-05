@@ -4,12 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 //import frc.robot.commands.BackupAuton;
 import frc.robot.commands.Auton;
+import frc.robot.commands.DriveStraight;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -25,6 +27,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain drivetrain = new Drivetrain();
   private final XboxController controller = new XboxController(0);
+
+  private final SlewRateLimiter leftLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter rightLimiter = new SlewRateLimiter(3);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -45,7 +50,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     drivetrain.setDefaultCommand(
         new RunCommand(
-            () -> drivetrain.tankDrive(-controller.getLeftY(), -controller.getRightY()),
+            () -> drivetrain.tankDrive(-leftLimiter.calculate(controller.getLeftY()),
+                -rightLimiter.calculate(controller.getRightY())),
             drivetrain));
   }
 
@@ -56,7 +62,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    //return new BackupAuton(drivetrain);
-    return new Auton(drivetrain);
+    // return new BackupAuton(drivetrain);
+    // return new Auton(drivetrain);
+    return new DriveStraight(drivetrain, 1, 0.75); //TODO - switch back to Auton
   }
 }

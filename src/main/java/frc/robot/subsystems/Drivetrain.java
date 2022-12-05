@@ -2,21 +2,20 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.util.Units;
 
 //Drivetrain Class
 public class Drivetrain extends SubsystemBase {
     public static Drivetrain instance;
     private CANSparkMax L_PRIMARY, R_PRIMARY;
-    SlewRateLimiter slewRateLeft = new SlewRateLimiter(0.9);
-    SlewRateLimiter slewRateRight = new SlewRateLimiter(0.9);
+    DifferentialDrive drive;
     private AHRS navx = new AHRS(SerialPort.Port.kMXP); // NOTE! You need to plug in the navx gyro thingy
     // into the kMXP, or 1 for short, for it to work. Doing usb or something with
     // mess things up
@@ -27,6 +26,7 @@ public class Drivetrain extends SubsystemBase {
 
         L_PRIMARY = new CANSparkMax(1, MotorType.kBrushless);
         R_PRIMARY = new CANSparkMax(2, MotorType.kBrushless);
+        drive = new DifferentialDrive(L_PRIMARY, R_PRIMARY);
         L_PRIMARY.getEncoder().setPositionConversionFactor(ENCODER_DISTANCE_TO_METERS);
         R_PRIMARY.getEncoder().setPositionConversionFactor(ENCODER_DISTANCE_TO_METERS);
         R_PRIMARY.setInverted(false);
@@ -34,17 +34,10 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putData(navx);
     }
 
-    /**
-     * Set the left side of the motor's speed
-     * 
-     * @param speed
-     */
-    public void setLeftSpeed(double speed) {
-        L_PRIMARY.set(slewRateLeft.calculate(speed * 0.6));
-    }
-
-    public void setRightSpeed(double speed) {
-        R_PRIMARY.set(slewRateRight.calculate(speed * 0.6));
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Distance", getPosition());
+        SmartDashboard.putNumber("Angle", navx.getAngle());
     }
 
     public double getLeftDistance() {
@@ -55,46 +48,22 @@ public class Drivetrain extends SubsystemBase {
         return R_PRIMARY.getEncoder().getPosition();
     }
 
-    /*
-     * public void setSpeed(double leftSpeed, double rightSpeed){
-     * setLeftSpeed(leftSpeed * 0.2);
-     * setRightSpeed(rightSpeed * 0.2);
-     * }
-     */
-
     public void tankDrive(double leftSpeed, double rightSpeed) {
-        setLeftSpeed(leftSpeed);
-        setRightSpeed(rightSpeed);
+        drive.tankDrive(leftSpeed, rightSpeed);
     }
-
-    // Arcade Drive Method
-    /*
-     * public void acradeDrive(double leftStick, double rightStick){
-     * double leftArcade = leftStick - rightStick;
-     * double rightArcade = leftStick + rightStick;
-     * 
-     * setSpeed(leftArcade * 0.4, rightArcade*0.4);
-     * }
-     */
+    public void arcadeDrive(double xSpeed, double rot) {
+        drive.arcadeDrive(xSpeed, rot);
+    }
 
     /**
      * Gets the current angle of the gyro.
      */
     public double getGyroAngle() {
-        //System.out.println("NAVX Con? Gyro get angle.");
-        //System.out.println(navx.isConnected());
-        System.out.print("NAVX Angle: ");
-        System.out.println(navx.getAngle());
         return navx.getAngle();
     }
 
-    public void end() {
+    public void stop() {
         tankDrive(0, 0);
-    }
-
-    public void hard_stop() {
-        L_PRIMARY.set(0);
-        R_PRIMARY.set(0);
     }
 
     public void resetGyro() {
