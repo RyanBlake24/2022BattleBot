@@ -9,7 +9,7 @@ public class TurnAngle extends PIDCommand {
 
     public TurnAngle(Drivetrain drivetrain, double setPoint) {
         super(new PIDController(/* Need to do PID Tuning to find the values needed to get the controller */
-                0.15, 0.0, 0), drivetrain::getGyroAngle, setPoint, d -> drivetrain.tankDrive(d, -d), drivetrain);
+                0.03, 0.05, 0), drivetrain::getGyroAngle, setPoint, d -> drivetrain.tankDrive(d * 0.25, -d * 0.25), drivetrain);
         this.driveTrain = drivetrain;
         addRequirements(drivetrain);
         getController().setTolerance(2);

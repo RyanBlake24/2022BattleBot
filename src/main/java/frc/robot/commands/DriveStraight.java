@@ -9,11 +9,11 @@ public class DriveStraight extends PIDCommand {
 
     public DriveStraight(Drivetrain drivetrain, double distance, double speedFactor) {
         super(new PIDController(/* Need to do PID Tuning to find the values needed to get the controller */
-                1.5, 0.0, 0.0), drivetrain::getPosition, distance, d -> drivetrain.tankDrive(d * speedFactor, d * speedFactor), drivetrain);
+                0.75, 0.2, 0.0), drivetrain::getPosition, distance, d -> drivetrain.tankDrive(d * speedFactor, d * speedFactor), drivetrain);
         this.drivetrain = drivetrain;
         addRequirements(drivetrain);
 
-        getController().setTolerance(0.1);
+        getController().setTolerance(0.05);
     }
 
     @Override

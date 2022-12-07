@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 //import frc.robot.commands.BackupAuton;
 import frc.robot.commands.Auton;
-import frc.robot.commands.DriveStraight;
+//import frc.robot.commands.DriveStraight;
+//import frc.robot.commands.TurnAngle;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -64,6 +65,6 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
     // return new BackupAuton(drivetrain);
     // return new Auton(drivetrain);
-    return new DriveStraight(drivetrain, 1, 0.75); //TODO - switch back to Auton
+    return new Auton(drivetrain);
   }
 }
