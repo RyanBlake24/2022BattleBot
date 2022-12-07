@@ -74,6 +74,20 @@ public class Drivetrain extends SubsystemBase {
      *                   joystick's y-axis.
      */
     public void tankDrive(double leftSpeed, double rightSpeed) {
+        // System.out.print("LEFT");
+        // System.out.println(leftSpeed);
+        // System.out.print("RIGHT");
+        // System.out.println(rightSpeed);
+        if (leftSpeed < -0.75 && rightSpeed < -0.75) {
+            leftSpeed = -0.7; //remove spin while reversing
+            rightSpeed = -0.7;
+            System.out.println("Speed lock REV.");
+        }
+        if (leftSpeed > 0.75 && rightSpeed > 0.75) {
+            leftSpeed = 0.9; //lock to max speed
+            rightSpeed = 0.9;
+            System.out.println("Speed lock FWD.");
+        }
         drive.tankDrive(leftSpeed, rightSpeed);
     }
 
@@ -96,6 +110,7 @@ public class Drivetrain extends SubsystemBase {
     /**
      * Gets the current angle of the gyro.
      */
+
     public double getGyroAngle() {
         return navx.getAngle();
     }

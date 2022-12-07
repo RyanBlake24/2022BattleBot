@@ -29,8 +29,8 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private final XboxController controller = new XboxController(0);
 
-  private final SlewRateLimiter leftLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter rightLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter leftLimiter = new SlewRateLimiter(1);
+  private final SlewRateLimiter rightLimiter = new SlewRateLimiter(2);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
